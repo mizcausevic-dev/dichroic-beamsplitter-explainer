@@ -1,0 +1,30 @@
+{
+  "name": "dichroic-beamsplitter-explainer",
+  "private": false,
+  "version": "1.0.0",
+  "description": "Deterministic 34s (1,020-frame @ 30fps) code-driven anatomy explainer of a Dichroic Beamsplitter grounded in Edmund Optics thin-film interference principles.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "lucide-react": "^1.0.0",
+    "motion": "^12.6.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.4.0",
+    "oxlint": "^0.16.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.3.0"
+  }
+}

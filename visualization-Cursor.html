@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dichroic Beamsplitter — Standalone 1,020-Frame Deterministic Visualization</title>
+  <style>
+    :root {
+      --stage: #0B1019;
+      --panel: #111826;
+      --border: #1E2D45;
+      --text: #E6EDF3;
+      --muted: #94A3B8;
+      --cyan: #00E5FF;
+      --gold: #FFD166;
+      --violet: #9D4EDD;
+      --font-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--stage);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding: 20px;
+    }
+    .container { max-width: 1180px; margin: 0 auto; }
+    header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 12px; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      font-family: var(--font-mono); font-size: 11px; padding: 3px 8px;
+      border-radius: 4px; background: rgba(0, 229, 255, 0.12); color: var(--cyan);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+    }
+    .stage-box {
+      background: #080D16; border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; box-shadow: 0 20px 45px rgba(0,0,0,0.55);
+    }
+    .hud-top {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+      padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono); font-size: 12px;
+    }
+    svg { width: 100%; height: auto; display: block; background-image: radial-gradient(rgba(0,229,255,0.08) 1px, transparent 1px); background-size: 24px 24px; }
+    .controls {
+      margin-top: 14px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px;
+    }
+    .act-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-bottom: 12px;
+    }
+    .act-btn {
+      background: #0B1019; border: 1px solid var(--border); color: var(--muted);
+      padding: 8px 10px; border-radius: 6px; text-align: left; cursor: pointer;
+      font-family: var(--font-mono); font-size: 11px; transition: all 0.15s;
+    }
+    .act-btn.active {
+      border-color: var(--cyan); background: rgba(0, 229, 255, 0.12); color: var(--text);
+    }
+    input[type="range"] { width: 100%; accent-color: var(--cyan); cursor: pointer; margin: 8px 0; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-top: 8px; }
+    button.primary {
+      background: var(--cyan); color: #0B1019; border: none; padding: 8px 16px;
+      border-radius: 6px; font-weight: 700; cursor: pointer; font-family: var(--font-mono); font-size: 12px;
+    }
+    button.secondary {
+      background: #162032; color: var(--text); border: 1px solid #283B5B;
+      padding: 7px 12px; border-radius: 6px; cursor: pointer; font-family: var(--font-mono); font-size: 12px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <span class="badge">STANDALONE ZERO-DEPENDENCY SCHEMATIC</span>
+        <h1 style="font-size: 20px; margin-top: 6px;">Dichroic Beamsplitter — 34s (1,020-Frame @ 30 fps) Anatomy Explainer</h1>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted);">
+        Stage: #0B1019 | Cyan: #00E5FF | Gold: #FFD166 | Violet: #9D4EDD
+      </div>
+    </header>
+
+    <div class="stage-box">
+      <div class="hud-top">
+        <div id="act-label" style="color: var(--cyan); font-weight: 700;">ACT 1/5: Reveal Mixed Wavelengths</div>
+        <div id="frame-readout">FRAME 0000 / 1019 (0.00s)</div>
+      </div>
+
+      <svg id="optic-svg" viewBox="0 0 920 480" aria-label="Standalone Dichroic Beamsplitter Schematic">
+        <g id="camera-group">
+          <line x1="60" y1="250" x2="860" y2="250" stroke="#1E2D45" stroke-dasharray="5 5" />
+          <line x1="450" y1="30" x2="450" y2="450" stroke="#1E2D45" stroke-dasharray="5 5" />
+
+          <!-- Input Port -->
+          <rect x="50" y="220" width="52" height="60" rx="4" fill="#111826" stroke="#475569" />
+          <text x="76" y="210" text-anchor="middle" fill="#E6EDF3" font-size="10" font-family="monospace">INPUT</text>
+
+          <!-- 90 deg Reflected Port -->
+          <rect x="420" y="24" width="60" height="32" rx="4" fill="#111826" stroke="#00E5FF" />
+          <text x="450" y="44" text-anchor="middle" fill="#00E5FF" font-size="9.5" font-family="monospace">90° R(λ)</text>
+
+          <!-- 0 deg Transmitted Port -->
+          <rect x="815" y="228" width="52" height="60" rx="4" fill="#111826" stroke="#FFD166" />
+          <text x="841" y="218" text-anchor="middle" fill="#FFD166" font-size="9.5" font-family="monospace">0° T(λ)</text>
+
+          <!-- 45 deg Dichroic Plate Assembly -->
+          <g id="plate-group" transform="translate(450, 250) rotate(-45)">
+            <rect x="-75" y="0" width="150" height="24" rx="2" fill="#1E293B" fill-opacity="0.8" stroke="#64748B" />
+            <rect x="-75" y="-5" width="150" height="5" fill="#9D4EDD" />
+            <rect x="-75" y="23" width="150" height="2.5" fill="#00E5FF" fill-opacity="0.6" />
+          </g>
+
+          <!-- Dynamic Wave Paths -->
+          <path id="wave-in-short" fill="none" stroke="#00E5FF" stroke-width="2.2" />
+          <path id="wave-in-long" fill="none" stroke="#FFD166" stroke-width="2.2" />
+          <path id="wave-refl" fill="none" stroke="#00E5FF" stroke-width="2.5" />
+          <path id="wave-trans" fill="none" stroke="#FFD166" stroke-width="2.5" />
+
+          <!-- Callout Box -->
+          <g transform="translate(24, 360)">
+            <rect width="872" height="96" rx="8" fill="#0E1524" stroke="#283B5B" />
+            <text id="callout-title" x="16" y="26" fill="#00E5FF" font-size="13" font-weight="bold" font-family="sans-serif"></text>
+            <text id="callout-desc" x="16" y="50" fill="#E6EDF3" font-size="12" font-family="sans-serif"></text>
+            <text id="callout-limit" x="16" y="74" fill="#94A3B8" font-size="11" font-family="monospace">
+              LIMITS: Behavior depends on wavelength, AOI, coating stack (n·d·cosθ = λ₀/4), and s/p polarization. Qualitative schematic.
+            </text>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="controls">
+      <div class="act-grid" id="act-buttons"></div>
+      <input id="scrubber" type="range" min="0" max="1019" value="0" />
+      <div class="btn-row">
+        <div style="display:flex; gap:8px;">
+          <button id="play-btn" class="primary">PAUSE</button>
+          <button id="reset-btn" class="secondary">Reset (F0)</button>
+          <button id="prev-btn" class="secondary">-15f</button>
+          <button id="next-btn" class="secondary">+15f</button>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--muted);">
+          Deterministic state = f(frame) | 30.0 fps
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ACTS = [
+      { idx: 1, start: 0, end: 149, title: "Act 1 (0–5s): Reveal Mixed Wavelengths", desc: "Complete optical assembly revealed; collimated short-λ (#00E5FF) and long-λ (#FFD166) wavepackets co-propagate toward the 45° active interface." },
+      { idx: 2, start: 150, end: 299, title: "Act 2 (5–10s): Selected Spectral Response", desc: "Sectional close-up on the alternating high/low index dielectric stack (#9D4EDD). Quarter-wave optical thickness (n·d·cosθ = λ₀/4) locks phase." },
+      { idx: 3, start: 300, end: 509, title: "Act 3 (10–17s): Separate Wavelength Paths", desc: "Stopband wavelengths reflect orthogonally at 90° while passband wavelengths refract through the substrate and exit the rear AR face." },
+      { idx: 4, start: 510, end: 749, title: "Act 4 (17–25s): Compare Incident & Output Spectra", desc: "Qualitative spectral transfer comparison: finite transition slope around cutoff λ_c, passband ripple, and conservation R(λ)+T(λ)+Loss(λ)=1." },
+      { idx: 5, start: 750, end: 1019, title: "Act 5 (25–34s): Mark Design Dependence & Limits", desc: "Complete-system pullback showing oblique AOI blue-shift, s/p polarization splitting at 45°, and plate walk-off vs. cemented cube boundaries." }
+    ];
+
+    let currentFrame = 0;
+    let isPlaying = true;
+
+    const actButtonsContainer = document.getElementById('act-buttons');
+    ACTS.forEach(act => {
+      const btn = document.createElement('button');
+      btn.className = 'act-btn';
+      btn.id = 'act-btn-' + act.idx;
+      btn.innerHTML = `<div style="color:#00E5FF;font-weight:700;">ACT ${act.idx} (F${act.start}–${act.end})</div><div>${act.title.split(': ')[1]}</div>`;
+      btn.onclick = () => { isPlaying = false; updatePlayButton(); seekFrame(act.start); };
+      actButtonsContainer.appendChild(btn);
+    });
+
+    function buildWave(x1, y1, x2, y2, wl, amp, phase) {
+      const dx = x2 - x1, dy = y2 - y1;
+      const len = Math.hypot(dx, dy);
+      const ux = dx / len, uy = dy / len;
+      const nx = -uy, ny = ux;
+      const steps = 60;
+      let d = '';
+      for (let i = 0; i <= steps; i++) {
+        const s = (i / steps) * len;
+        const env = Math.sin((i / steps) * Math.PI);
+        const offset = Math.sin((s / wl) * Math.PI * 2 - phase) * amp * Math.min(1, env * 2.5);
+        const px = x1 + ux * s + nx * offset;
+        const py = y1 + uy * s + ny * offset;
+        d += (i === 0 ? 'M ' : ' L ') + px.toFixed(1) + ' ' + py.toFixed(1);
+      }
+      return d;
+    }
+
+    function renderFrame(f) {
+      const act = ACTS.find(a => f >= a.start && f <= a.end) || ACTS[4];
+      document.getElementById('act-label').textContent = `ACT ${act.idx}/5: ${act.title}`;
+      document.getElementById('frame-readout').textContent = `FRAME ${String(f).padStart(4, '0')} / 1019 (${(f / 30).toFixed(2)}s)`;
+      document.getElementById('callout-title').textContent = act.title;
+      document.getElementById('callout-desc').textContent = act.desc;
+      document.getElementById('scrubber').value = f;
+
+      ACTS.forEach(a => {
+        const b = document.getElementById('act-btn-' + a.idx);
+        if (b) b.className = 'act-btn' + (a.idx === act.idx ? ' active' : '');
+      });
+
+      const phase = f * 0.24;
+      document.getElementById('wave-in-short').setAttribute('d', buildWave(102, 247, 450, 247, 22, 6, phase * 1.3));
+      document.getElementById('wave-in-long').setAttribute('d', buildWave(102, 253, 450, 253, 38, 7, phase * 0.85));
+      document.getElementById('wave-refl').setAttribute('d', buildWave(450, 250, 450, 56, 22, 6.5, phase * 1.3));
+      document.getElementById('wave-trans').setAttribute('d', buildWave(465, 258, 815, 258, 38, 7, phase * 0.85));
+    }
+
+    function seekFrame(f) {
+      currentFrame = Math.max(0, Math.min(1019, Math.round(f)));
+      renderFrame(currentFrame);
+    }
+
+    function updatePlayButton() {
+      document.getElementById('play-btn').textContent = isPlaying ? 'PAUSE' : 'PLAY 30 FPS';
+    }
+
+    document.getElementById('scrubber').addEventListener('input', e => {
+      isPlaying = false; updatePlayButton(); seekFrame(Number(e.target.value));
+    });
+    document.getElementById('play-btn').onclick = () => { isPlaying = !isPlaying; updatePlayButton(); };
+    document.getElementById('reset-btn').onclick = () => { seekFrame(0); };
+    document.getElementById('prev-btn').onclick = () => { isPlaying = false; updatePlayButton(); seekFrame(currentFrame - 15); };
+    document.getElementById('next-btn').onclick = () => { isPlaying = false; updatePlayButton(); seekFrame(currentFrame + 15); };
+
+    let last = performance.now();
+    function loop(now) {
+      if (isPlaying && now - last >= 1000 / 30) {
+        last = now;
+        currentFrame = (currentFrame + 1) % 1020;
+        renderFrame(currentFrame);
+      }
+      requestAnimationFrame(loop);
+    }
+    renderFrame(0);
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
