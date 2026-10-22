@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cosmic-cyber" data-mode="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dichroic Beamsplitter Explainer: Product Strategy & Architecture Dashboard</title>
+  <style>
+    :root {
+      --bg: #0B1019;
+      --panel: #111826;
+      --border: #1E2D45;
+      --text: #E6EDF3;
+      --muted: #94A3B8;
+      --accent: #00E5FF;
+      --secondary: #FFD166;
+      --tertiary: #9D4EDD;
+      --radius: 12px;
+      --font-sans: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    /* 1. Bento Grid */
+    [data-theme="bento-grid"][data-mode="dark"] {
+      --bg: #090A0F; --panel: #141722; --border: #252A3D; --text: #F1F5F9; --muted: #94A3B8;
+      --accent: #38BDF8; --secondary: #FBBF24; --tertiary: #A855F7; --radius: 18px;
+    }
+    [data-theme="bento-grid"][data-mode="light"] {
+      --bg: #F1F5F9; --panel: #FFFFFF; --border: #CBD5E1; --text: #0F172A; --muted: #475569;
+      --accent: #0284C7; --secondary: #D97706; --tertiary: #7E22CE; --radius: 18px;
+    }
+
+    /* 2. Cosmic Cyber */
+    [data-theme="cosmic-cyber"][data-mode="dark"] {
+      --bg: #0B1019; --panel: #111826; --border: #1E2D45; --text: #E6EDF3; --muted: #94A3B8;
+      --accent: #00E5FF; --secondary: #FFD166; --tertiary: #9D4EDD; --radius: 12px;
+    }
+    [data-theme="cosmic-cyber"][data-mode="light"] {
+      --bg: #EFF6FF; --panel: #FFFFFF; --border: #BFDBFE; --text: #0B1019; --muted: #334155;
+      --accent: #0369A1; --secondary: #B45309; --tertiary: #6D28D9; --radius: 12px;
+    }
+
+    /* 3. Swiss Architect */
+    [data-theme="swiss-architect"][data-mode="dark"] {
+      --bg: #0C0C0C; --panel: #161616; --border: #333333; --text: #FAFAFA; --muted: #A3A3A3;
+      --accent: #FF3B30; --secondary: #FFD60A; --tertiary: #5E5CE6; --radius: 2px;
+    }
+    [data-theme="swiss-architect"][data-mode="light"] {
+      --bg: #F5F5F4; --panel: #FFFFFF; --border: #1C1917; --text: #0C0A09; --muted: #57534E;
+      --accent: #DC2626; --secondary: #CA8A04; --tertiary: #4338CA; --radius: 2px;
+    }
+
+    /* 4. Aqua Web 2.0 */
+    [data-theme="aqua-web"][data-mode="dark"] {
+      --bg: #061826; --panel: #0C263B; --border: #1C4B70; --text: #E0F2FE; --muted: #7DD3FC;
+      --accent: #00F0FF; --secondary: #FDE047; --tertiary: #C084FC; --radius: 20px;
+    }
+    [data-theme="aqua-web"][data-mode="light"] {
+      --bg: #E0F2FE; --panel: #FFFFFF; --border: #7DD3FC; --text: #0C4A6E; --muted: #0369A1;
+      --accent: #0284C7; --secondary: #CA8A04; --tertiary: #7C3AED; --radius: 20px;
+    }
+
+    /* 5. Pop Brutalist */
+    [data-theme="pop-brutalist"][data-mode="dark"] {
+      --bg: #12101B; --panel: #1E1B2E; --border: #FFFFFF; --text: #FFFFFF; --muted: #CBD5E1;
+      --accent: #00E5FF; --secondary: #FFE600; --tertiary: #FF2E93; --radius: 4px;
+    }
+    [data-theme="pop-brutalist"][data-mode="light"] {
+      --bg: #FEF08A; --panel: #FFFFFF; --border: #000000; --text: #000000; --muted: #334155;
+      --accent: #0284C7; --secondary: #B45309; --tertiary: #9333EA; --radius: 4px;
+    }
+
+    /* 6. Steel Tactical */
+    [data-theme="steel-tactical"][data-mode="dark"] {
+      --bg: #0D1114; --panel: #161C20; --border: #2C3840; --text: #DCE4E8; --muted: #8799A3;
+      --accent: #2FD57A; --secondary: #FFD166; --tertiary: #00E5FF; --radius: 6px;
+    }
+    [data-theme="steel-tactical"][data-mode="light"] {
+      --bg: #E2E8F0; --panel: #F8FAFC; --border: #94A3B8; --text: #0F172A; --muted: #475569;
+      --accent: #059669; --secondary: #D97706; --tertiary: #0284C7; --radius: 6px;
+    }
+
+    /* 7. Parchment */
+    [data-theme="parchment"][data-mode="dark"] {
+      --bg: #1C1915; --panel: #26221C; --border: #423B30; --text: #F5EFE6; --muted: #B8AC99;
+      --accent: #E09F3E; --secondary: #66FCF1; --tertiary: #C77DFF; --radius: 8px;
+    }
+    [data-theme="parchment"][data-mode="light"] {
+      --bg: #F7F2E7; --panel: #FFFDF9; --border: #D6CBB8; --text: #2B2620; --muted: #665B4C;
+      --accent: #9C4221; --secondary: #0369A1; --tertiary: #6B21A8; --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text); font-family: var(--font-sans);
+      line-height: 1.55; padding: 24px; transition: background 0.2s, color 0.2s;
+    }
+    .wrap { max-width: 1240px; margin: 0 auto; }
+    .topbar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 14px; padding: 16px 20px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 24px;
+    }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    select, button {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 12px; border-radius: var(--radius); font-family: var(--font-mono);
+      font-size: 12px; cursor: pointer;
+    }
+    .grid-10 {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .card-num {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .card h2 { font-size: 17px; margin: 6px 0 8px; }
+    .card p { font-size: 13.5px; color: var(--muted); }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    }
+    th { font-family: var(--font-mono); color: var(--accent); font-size: 11.5px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <div class="card-num">KINETIC GAIN ESTATE | PRODUCT STRATEGY & GOVERNANCE DASHBOARD</div>
+        <h1 style="font-size: 22px; margin-top: 4px;">Dichroic Beamsplitter: 1,020-Frame Anatomy Explainer</h1>
+      </div>
+      <div class="controls">
+        <label style="font-family:var(--font-mono);font-size:12px;">Theme:</label>
+        <select id="theme-select" aria-label="Select Dashboard Theme">
+          <option value="bento-grid">1. Bento Grid</option>
+          <option value="cosmic-cyber" selected>2. Cosmic Cyber</option>
+          <option value="swiss-architect">3. Swiss Architect</option>
+          <option value="aqua-web">4. Aqua Web 2.0</option>
+          <option value="pop-brutalist">5. Pop Brutalist</option>
+          <option value="steel-tactical">6. Steel Tactical</option>
+          <option value="parchment">7. Parchment</option>
+        </select>
+        <button id="mode-toggle" type="button">Toggle Light / Dark</button>
+      </div>
+    </div>
+
+    <div class="grid-10">
+      <div class="card">
+        <div class="card-num">01. What the Product Is</div>
+        <h2>Deterministic 34s Optical Anatomy Explainer</h2>
+        <p>A code-driven, frame-locked (1,020 frames at 30 fps, indexed 0–1019) interactive technical stage illustrating how a dichroic beamsplitter separates mixed wavelengths via thin-film quarter-wave interference, paired with real-time AOI, polarization, and plate-vs-cube parameter controls.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">02. Who It Is For</div>
+        <h2>Optical Engineers, Instrument Architects & Technical Buyers</h2>
+        <p>Built for photonics systems engineers, microscopy/spectroscopy designers, laser application engineers, and technical procurement leads evaluating dichroic plates vs. cemented cubes before committing to catalog or custom coating specs.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">03. Why It Wins</div>
+        <h2>Deterministic Causality + Honest Physical Boundaries</h2>
+        <p>Unlike marketing animations that fake zero-loss splitting or hide oblique angle shifts, this instrument pairs a deterministic frame scrubber with live s/p polarization splitting, Snell refraction walk-off, and AOI blue-shift boundaries grounded in Edmund Optics application literature.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">04. How It Should Be Structured</div>
+        <h2>5-Act Camera Timeline + Dual-Inset Technical Stage</h2>
+        <p>Structured into five frame-locked acts: (1) Frames 0–149 Mixed Input Reveal, (2) Frames 150–299 Quarter-Wave Stack Cutaway, (3) Frames 300–509 Orthogonal Path Separation, (4) Frames 510–749 Qualitative Spectral Comparison, and (5) Frames 750–1019 Design Dependence & Limits.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">05. How Users Discover It</div>
+        <h2>SEO/GEO/AEO Technical Retrieval & GitHub Pages</h2>
+        <p>Discovered via high-intent technical queries (dichroic beamsplitter AOI shift, s-pol vs p-pol splitting at 45 degrees, plate vs cube beamsplitter ghost reflection), structured TechArticle JSON-LD, and the companion Senior Editor Medium deep-dive.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">06. How Users Engage With It</div>
+        <h2>Frame Scrubbing & Parameter Perturbation</h2>
+        <p>Users scrub across all 1,020 frames (`+1f/-1f`, Act presets, speed multipliers) and perturb coating mode (Longpass/Shortpass), substrate geometry (Plate/Cube), polarization (Unpolarized/S-Pol/P-Pol), and nominal AOI (30°–60°).</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">07. How Users Convert</div>
+        <h2>Static-First Engineering Specification Worksheet</h2>
+        <p>Engineers open the interactive Dichroic Specification & RFQ Checklist modal, configure target laser fluence and collimation half-angle, and copy a formatted procurement verification specification directly to their clipboard.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">08. How It Makes Money</div>
+        <h2>Technical Authority, Lead Capture & Reusable Vertical Engine</h2>
+        <p>Monetizes as a high-intent technical specification tool and B2B engineering authority asset for precision optical components, procurement directories, and sponsor-ready technical application guides without fabricating claims.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">09. How It Should Launch</div>
+        <h2>GitHub Repository + Live GH Pages Branch + Medium Feature</h2>
+        <p>Ships with automated static Vite production bundle (`base: './'`), standalone zero-dependency visualization HTML, 7-theme strategy dashboard, and an evidence-graded Medium technical feature with custom hero artwork.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">10. How It Should Improve After Launch</div>
+        <h2>Manufacturer CSV Import & Multi-Element Optical Train</h2>
+        <p>Post-launch iterations add optional user-uploaded manufacturer CSV transmittance/reflectance curve overlays, multi-dichroic polychroic filter wheel chaining, and WebCodecs MP4 frame-accurate export.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-num">CROSS-VERTICAL REUSE MATRIX</div>
+      <h2>How This 1,020-Frame Deterministic Engine Repurposes Across Other Engineering Verticals</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Target Vertical</th>
+            <th>Primary Transport (#00E5FF)</th>
+            <th>Energy / Actuation (#FFD166)</th>
+            <th>Control / Boundary State (#9D4EDD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Precision Optical Components (Current)</strong></td>
+            <td>Short-λ Signal Channel</td>
+            <td>Long-λ Energy Channel</td>
+            <td>Alternating Dielectric Stack (n_H / n_L) & AOI Envelope</td>
+          </tr>
+          <tr>
+            <td><strong>Acoustic / Elastic Metamaterials</strong></td>
+            <td>Propagating Lattice Phonon Wave</td>
+            <td>Locally Trapped Resonator Energy</td>
+            <td>Bandgap Frequency Stopband & Unit-Cell Boundary</td>
+          </tr>
+          <tr>
+            <td><strong>RF / Microwave Diplexers & Cavity Filters</strong></td>
+            <td>Low-Band RF Carrier Path</td>
+            <td>High-Band RF Transmit Path</td>
+            <td>Coupled Resonator Iris Admittance & S-Parameter Isolation</td>
+          </tr>
+          <tr>
+            <td><strong>Membrane Gas & Electrochemical Separators</strong></td>
+            <td>Permeate Transport Stream</td>
+            <td>Retentate / Pressure Energy Stream</td>
+            <td>Selective Polymer/Ceramic Active Layer & Pressure Limits</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const themeSelect = document.getElementById('theme-select');
+    const modeToggle = document.getElementById('mode-toggle');
+
+    const savedTheme = localStorage.getItem('kg_dashboard_theme') || 'cosmic-cyber';
+    const savedMode = localStorage.getItem('kg_dashboard_mode') || 'dark';
+
+    root.setAttribute('data-theme', savedTheme);
+    root.setAttribute('data-mode', savedMode);
+    themeSelect.value = savedTheme;
+
+    themeSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      root.setAttribute('data-theme', val);
+      localStorage.setItem('kg_dashboard_theme', val);
+    });
+
+    modeToggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-mode') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-mode', current);
+      localStorage.setItem('kg_dashboard_mode', current);
+    });
+  </script>
+</body>
+</html>
