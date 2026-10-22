@@ -90,32 +90,46 @@ export const AnatomyStage: React.FC<AnatomyStageProps> = ({
   const cy = 310;
 
   // Plate or hypotenuse rotation angle in SVG coordinates
-  // At 45 deg AOI with horizontal input beam (from left to right), normal is at -45 deg,
+  // At 45 deg AOI with horizontal input beam (from left to right), normal is at -135 deg,
   // and the dichroic surface runs from bottom-left to top-right (-45 deg from horizontal).
   const surfaceTiltDeg = -(90 - effectiveAoi);
+  const surfaceTiltRad = (surfaceTiltDeg * Math.PI) / 180;
 
   // Input beam start (left collimator port) -> incidence point (cx, cy)
   const inStartX = 115;
   const inStartY = cy;
 
-  // Reflected beam direction depends on surface tilt (2 * delta_theta)
-  // At nominal 45 deg AOI, reflected beam goes straight UP (cx, 62)
+  // Reflected beam direction depends on surface tilt: theta_refl = -90 deg + 2 * (AOI - 45 deg)
+  // At nominal 45 deg AOI, reflected beam goes straight UP (cx, 58)
   const deltaAoiRad = ((effectiveAoi - 45) * Math.PI) / 180;
-  const reflLength = 225;
-  const reflAngleRad = -Math.PI / 2 - deltaAoiRad * 2;
+  const reflLength = 252;
+  const reflAngleRad = -Math.PI / 2 + deltaAoiRad * 2;
   const reflEndX = cx + Math.cos(reflAngleRad) * reflLength;
   const reflEndY = cy + Math.sin(reflAngleRad) * reflLength;
 
-  // Transmitted beam refraction walk-off (for Plate) vs straight-through (for Cube)
-  const plateWalkoffY = architecture === 'plate' ? 16 + (effectiveAoi - 45) * 0.35 : 0;
-  const rearExitX = architecture === 'plate' ? cx + 34 : cx;
-  const rearExitY = cy + plateWalkoffY;
+  // Exact Snell's Law refraction through tilted plate of thickness t = 28 px (n_sub = 1.50)
+  const plateThickness = 28;
+  const nSubstrate = 1.5;
+  const aoiRad = (effectiveAoi * Math.PI) / 180;
+  const theta2Rad = Math.asin(Math.sin(aoiRad) / nSubstrate);
+  const localRearX = plateThickness * Math.tan(theta2Rad);
+
+  const rearExitX =
+    architecture === 'plate'
+      ? cx + localRearX * Math.cos(surfaceTiltRad) - plateThickness * Math.sin(surfaceTiltRad)
+      : cx;
+  const rearExitY =
+    architecture === 'plate'
+      ? cy + localRearX * Math.sin(surfaceTiltRad) + plateThickness * Math.cos(surfaceTiltRad)
+      : cy;
   const transEndX = 835;
   const transEndY = rearExitY;
 
-  // Ghost reflection from rear surface of plate
-  const ghostEndX = reflEndX + 38;
-  const ghostEndY = reflEndY + 14;
+  // Ghost reflection from rear surface of plate: bounces internally to front face at (2*localRearX, 0) then exits parallel to reflected beam
+  const ghostFrontX = cx + 2 * localRearX * Math.cos(surfaceTiltRad);
+  const ghostFrontY = cy + 2 * localRearX * Math.sin(surfaceTiltRad);
+  const ghostEndX = ghostFrontX + Math.cos(reflAngleRad) * 195;
+  const ghostEndY = ghostFrontY + Math.sin(reflAngleRad) * 195;
 
   // Channel assignment based on Longpass vs Shortpass
   // Cyan (#00E5FF) = primary transport / short-wavelength band
@@ -521,7 +535,7 @@ export const AnatomyStage: React.FC<AnatomyStageProps> = ({
                 </g>
               ) : (
                 /* CEMENTED CUBE BEAMSPLITTER GEOMETRY */
-                <g>
+                <g transform={`rotate(${effectiveAoi - 45})`}>
                   {/* Top-Left Input Right-Angle Prism */}
                   <polygon
                     points="-64,-64 64,-64 -64,64"
@@ -650,16 +664,14 @@ export const AnatomyStage: React.FC<AnatomyStageProps> = ({
                     strokeWidth="2.2"
                     strokeDasharray="3 2"
                   />
-                  {/* Residual Rear-Surface Ghost Reflection (Explicitly shown in Act 3 & Act 5) */}
-                  <line
-                    x1={rearExitX}
-                    y1={rearExitY}
-                    x2={ghostEndX}
-                    y2={ghostEndY}
+                  {/* Residual Rear-Surface Ghost Reflection (Internal bounce + parallel ghost exit) */}
+                  <polyline
+                    points={`${rearExitX.toFixed(1)},${rearExitY.toFixed(1)} ${ghostFrontX.toFixed(1)},${ghostFrontY.toFixed(1)} ${ghostEndX.toFixed(1)},${ghostEndY.toFixed(1)}`}
+                    fill="none"
                     stroke={transmittedColor}
                     strokeWidth="1.2"
                     strokeDasharray="4 4"
-                    strokeOpacity={0.35 + timeline.boundaryOverlayStrength * 0.35}
+                    strokeOpacity={0.38 + timeline.boundaryOverlayStrength * 0.35}
                   />
                   {(timeline.currentPhase.index === 3 || timeline.currentPhase.index === 5) && (
                     <g transform={`translate(${rearExitX + 12}, ${rearExitY + 26})`}>

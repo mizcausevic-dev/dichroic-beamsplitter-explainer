@@ -1,4 +1,4 @@
-# Dichroic Beamsplitter — Code-Driven Anatomy Motion Explainer
+# Dichroic Beamsplitter: Code-Driven Anatomy Motion Explainer
 
 **GitHub About (1-line):** Deterministic 34s (1,020-frame @ 30fps) code-driven anatomy explainer of a Dichroic Beamsplitter grounded in thin-film interference physics, with interactive cutaway stage and SEO-optimized Medium article.
 
@@ -55,7 +55,7 @@ npm run build
 
 ## Reference Starting Points & Scope
 
-- [Edmund Optics — What Are Beamsplitters?](https://www.edmundoptics.com/knowledge-center/application-notes/optics/what-are-beamsplitters/)
-- [Edmund Optics — Introduction to Optical Prisms](https://www.edmundoptics.com/knowledge-center/application-notes/optics/introduction-to-optical-prisms/)
+- [Edmund Optics: What Are Beamsplitters?](https://www.edmundoptics.com/knowledge-center/application-notes/optics/what-are-beamsplitters/)
+- [Edmund Optics: Introduction to Optical Prisms](https://www.edmundoptics.com/knowledge-center/application-notes/optics/introduction-to-optical-prisms/)
 
 *Reference Scope:* These sources introduce the architecture and mechanism; they do not independently validate every animation choice or any implementation-specific performance. Verify a selected product and publication claims against manufacturer documentation before release.

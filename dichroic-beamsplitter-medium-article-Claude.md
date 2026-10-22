@@ -165,9 +165,9 @@ Whether you are specifying a dichroic optic for a fluorescence microscope or bui
 
 ### Primary Technical References & Scope Note
 
-- **Edmund Optics — What Are Beamsplitters?**  
+- **Edmund Optics: What Are Beamsplitters?**  
   [https://www.edmundoptics.com/knowledge-center/application-notes/optics/what-are-beamsplitters/](https://www.edmundoptics.com/knowledge-center/application-notes/optics/what-are-beamsplitters/)
-- **Edmund Optics — Introduction to Optical Prisms**  
+- **Edmund Optics: Introduction to Optical Prisms**  
   [https://www.edmundoptics.com/knowledge-center/application-notes/optics/introduction-to-optical-prisms/](https://www.edmundoptics.com/knowledge-center/application-notes/optics/introduction-to-optical-prisms/)
 
 *Reference Scope Disclosure:* These sources ground the physical architecture and mechanism of plate and cube beamsplitters; they do not independently validate illustrative camera choreography or represent a measured datasheet for a specific proprietary coating stack. Always verify selected optical components against manufacturer lot documentation before production release.

@@ -30,7 +30,7 @@ const TICKER_ITEMS = [
   'TIMELINE: 34.00s @ 30 FPS (1,020 DETERMINISTIC FRAMES 0–1019)',
   'STAGE PALETTE: #0B1019 TECHNICAL STAGE | #00E5FF SIGNAL | #FFD166 ENERGY | #9D4EDD DIELECTRIC STACK',
   'OPTICAL CONDITION: n · d · cos(θ) = λ₀ / 4 QUARTER-WAVE INTERFERENCE',
-  'LIMITATIONS: WAVELENGTH, AOI, COATING & POLARIZATION DEPENDENT — NO PERFECT SPLIT OR ZERO LOSS',
+  'LIMITATIONS: WAVELENGTH, AOI, COATING & POLARIZATION DEPENDENT. NO PERFECT SPLIT OR ZERO LOSS',
 ];
 
 export function App() {
@@ -149,7 +149,7 @@ export function App() {
                 </span>
               </div>
               <h1 className="text-lg font-bold tracking-tight text-[#E6EDF3] sm:text-xl">
-                Dichroic Beamsplitter — Code-Driven Anatomy Explainer
+                Dichroic Beamsplitter: Code-Driven Anatomy Explainer
               </h1>
             </div>
           </div>
@@ -345,7 +345,7 @@ export function App() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-[11px] text-[#E6EDF3] underline decoration-[#00E5FF]/50 hover:text-[#00E5FF]"
                 >
-                  Edmund Optics — What Are Beamsplitters?
+                  Edmund Optics: What Are Beamsplitters?
                   <ExternalLink className="h-3 w-3" />
                 </a>
                 <a
@@ -354,7 +354,7 @@ export function App() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-[11px] text-[#E6EDF3] underline decoration-[#00E5FF]/50 hover:text-[#00E5FF]"
                 >
-                  Edmund Optics — Introduction to Optical Prisms
+                  Edmund Optics: Introduction to Optical Prisms
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
@@ -746,7 +746,7 @@ export function App() {
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-[#00E5FF]" />
             <span>
-              Educational Mechanism Schematic — Verify specific product performance against
+              Educational Mechanism Schematic. Verify specific product performance against
               manufacturer datasheets prior to engineering release.
             </span>
           </div>

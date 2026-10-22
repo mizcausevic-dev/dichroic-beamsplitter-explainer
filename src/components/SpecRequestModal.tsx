@@ -119,7 +119,7 @@ export const SpecRequestModal: React.FC<SpecRequestModalProps> = ({
                 className="w-full rounded-lg border border-[#283B5B] bg-[#0B1019] px-3 py-2 text-[#E6EDF3] focus:border-[#00E5FF] focus:outline-none"
               >
                 <option>CW Low-Power (&lt; 1 W/cm²)</option>
-                <option>High-Power CW (&gt; 10 W/cm² — Prefer Plate)</option>
+                <option>High-Power CW (&gt; 10 W/cm², Prefer Plate)</option>
                 <option>Pulsed Nanosecond / Ultrafast (Verify LIDT)</option>
               </select>
             </div>
@@ -135,8 +135,8 @@ export const SpecRequestModal: React.FC<SpecRequestModalProps> = ({
               className="w-full rounded-lg border border-[#283B5B] bg-[#0B1019] px-3 py-2 text-[#E6EDF3] focus:border-[#00E5FF] focus:outline-none"
             >
               <option>Collimated (&lt; ±1.5°)</option>
-              <option>Moderately Convergent (±3° to ±6° — Expect Edge Smearing)</option>
-              <option>High-NA Non-Collimated (&gt; ±8° — Blue-Shift Risk)</option>
+              <option>Moderately Convergent (±3° to ±6°, Expect Edge Smearing)</option>
+              <option>High-NA Non-Collimated (&gt; ±8°, Blue-Shift Risk)</option>
             </select>
           </div>
 

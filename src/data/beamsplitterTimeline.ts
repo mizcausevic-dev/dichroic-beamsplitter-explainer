@@ -203,7 +203,7 @@ export const TIMELINE_PHASES: TimelinePhase[] = [
       'Angle-of-Incidence Sensitivity: Oblique Cone Causes Spectral Blue-Shift',
       'Polarization Splitting: S-Pol (TE) vs. P-Pol (TM) Cutoff Divergence at 45°',
       'Plate vs. Cube Trade-Offs: Ghosting/Astigmatism vs. Cement Laser Damage Limit',
-      'No Proprietary Layer Recipe Claimed — Schematic Educational Model',
+      'No Proprietary Layer Recipe Claimed: Schematic Educational Model',
     ],
     scaleAndTimeNotes: {
       spatialScale: 'Complete system envelope with angular acceptance cone (±Δθ) and mechanical apertures',
